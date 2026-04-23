@@ -1,11 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from database import engine, Base
-from routers import remittance, predict
+from routers import economics, predict
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="Nepal Remittance Tracker API")
+app = FastAPI(title="Nepal Economic Dashboard API")
 
 app.add_middleware(
     CORSMiddleware,
@@ -14,9 +14,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(remittance.router)
+app.include_router(economics.router)
 app.include_router(predict.router)
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "message": "Nepal Remittance Tracker API is running"}
+    return {"status": "ok", "message": "Nepal Economic Dashboard API is running"}

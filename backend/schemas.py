@@ -1,24 +1,16 @@
 from pydantic import BaseModel
 from typing import Optional
 
-class RemittanceFlowSchema(BaseModel):
+class EconomicIndicatorSchema(BaseModel):
     id: int
-    fiscal_year: str
-    year_ad: int
-    source_country: str
-    amount_usd: float
-    num_workers: Optional[int]
+    year: int
+    remittance_usd: Optional[float]
+    exchange_rate_npr_usd: Optional[float]
+    inflation_pct: Optional[float]
 
     class Config:
         from_attributes = True
 
-class SummarySchema(BaseModel):
-    fiscal_year: str
-    year_ad: int
-    total_amount_usd: float
-    total_workers: Optional[int]
-
-class CountrySchema(BaseModel):
-    source_country: str
-    total_amount_usd: float
-    total_workers: Optional[int]
+class ForecastSchema(BaseModel):
+    year: int
+    predicted_remittance_usd: float
