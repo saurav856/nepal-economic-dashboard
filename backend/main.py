@@ -16,7 +16,10 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[
+    "http://localhost:5173",
+    "https://nepal-economic-dashboard.vercel.app"
+],
     allow_methods=["GET"],
     allow_headers=["*"],
 )
