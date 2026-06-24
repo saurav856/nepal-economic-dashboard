@@ -10,12 +10,17 @@ function Dashboard({ toggleTheme, theme }) {
   const [data, setData] = useState([])
   const [forecast, setForecast] = useState({ historical: [], forecast: [] })
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     Promise.all([getEconomics(), getPredict(3)])
       .then(([econRes, forecastRes]) => {
         setData(econRes.data)
         setForecast(forecastRes.data)
+      })
+      .catch(err => {
+        console.error("API Error:", err)
+        setError(err.message || "Failed to load data")
       })
       .finally(() => setLoading(false))
   }, [])
@@ -46,6 +51,8 @@ function Dashboard({ toggleTheme, theme }) {
 
         {loading ? (
           <p style={{ fontFamily: "IBM Plex Mono", color: "var(--color-muted)" }}>Loading...</p>
+        ) : error ? (
+          <p style={{ fontFamily: "IBM Plex Mono", color: "var(--color-accent)" }}>Error: {error}</p>
         ) : (
           <div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px" }}>

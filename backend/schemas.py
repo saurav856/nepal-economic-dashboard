@@ -10,7 +10,3 @@ class EconomicIndicatorSchema(BaseModel):
 
     class Config:
         from_attributes = True
-
-class ForecastSchema(BaseModel):
-    year: int
-    predicted_remittance_usd: float

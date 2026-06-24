@@ -6,7 +6,7 @@
 
 ## Overview
 
-Nepal Economic Dashboard is a full-stack web application that visualizes three interconnected macroeconomic indicators:
+Nepal Economic Dashboard visualizes three interconnected macroeconomic indicators with a linear regression forecast:
 
 - **Remittance Inflows (USD)** — money sent home by Nepali workers abroad
 - **NPR/USD Exchange Rate** — how the Nepali rupee has weakened over time
@@ -36,7 +36,7 @@ Nepal Economic Dashboard is a full-stack web application that visualizes three i
 - **Uvicorn** — ASGI server
 
 ### Frontend
-- **React 18** — UI framework
+- **React 19** — UI framework
 - **Vite** — build tool
 - **Recharts** — charts
 - **Axios** — HTTP client
@@ -80,7 +80,6 @@ nepal-remittance-tracker/
 |---|---|---|
 | GET | `/health` | Health check |
 | GET | `/economics/` | All yearly indicators |
-| GET | `/economics/latest` | Most recent year |
 | GET | `/predict/?years=3` | Remittance forecast |
 
 ---
@@ -96,20 +95,21 @@ nepal-remittance-tracker/
 
 ```bash
 cd backend
-python -m venv venv
-venv\Scripts\activate        # Windows
-source venv/bin/activate     # Mac/Linux
 pip install -r requirements.txt
 ```
 
-Create `backend/.env`:
-```
-DATABASE_URL=postgresql://postgres:yourpassword@localhost:5432/remittance_db
+Create the database:
+```bash
+psql -U postgres -c "CREATE DATABASE nepal_economy;"
 ```
 
-Create DB and seed data:
+Update `backend/.env` with your PostgreSQL password:
+```
+DATABASE_URL=postgresql://postgres:yourpassword@localhost:5432/nepal_economy
+```
+
+Seed and start:
 ```bash
-psql -U postgres -c "CREATE DATABASE remittance_db;"
 python seed.py
 uvicorn main:app --reload
 ```
@@ -122,11 +122,6 @@ API docs: `http://localhost:8000/docs`
 cd frontend
 npm install
 npm run dev
-```
-
-Create `frontend/.env`:
-```
-VITE_API_BASE_URL=http://localhost:8000
 ```
 
 Frontend: `http://localhost:5173`

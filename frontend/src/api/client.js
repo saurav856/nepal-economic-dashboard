@@ -5,5 +5,4 @@ const client = axios.create({
 })
 
 export const getEconomics = () => client.get("/economics/")
-export const getLatest = () => client.get("/economics/latest")
 export const getPredict = (years) => client.get("/predict/", { params: { years } })

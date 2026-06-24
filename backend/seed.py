@@ -1,7 +1,7 @@
-import pandas as pd
+import csv
+import os
 from database import engine, Base, SessionLocal
 from models import EconomicIndicator
-import os
 
 def seed():
     Base.metadata.create_all(bind=engine)
@@ -15,16 +15,25 @@ def seed():
         return
 
     csv_path = os.path.join(os.path.dirname(__file__), "..", "data", "nepal_economic_data.csv")
-    df = pd.read_csv(csv_path)
 
-    print(f"Loading {len(df)} records...")
+    with open(csv_path, newline="") as f:
+        reader = csv.DictReader(f)
+        rows = list(reader)
 
-    for _, row in df.iterrows():
+    print(f"Loading {len(rows)} records...")
+
+    for row in rows:
+        def to_float(val):
+            try:
+                return float(val) if val else None
+            except (ValueError, TypeError):
+                return None
+
         record = EconomicIndicator(
             year=int(row["year"]),
-            remittance_usd=float(row["remittance_usd"]) if pd.notna(row["remittance_usd"]) else None,
-            exchange_rate_npr_usd=float(row["exchange_rate_npr_usd"]) if pd.notna(row["exchange_rate_npr_usd"]) else None,
-            inflation_pct=float(row["inflation_pct"]) if pd.notna(row["inflation_pct"]) else None,
+            remittance_usd=to_float(row["remittance_usd"]),
+            exchange_rate_npr_usd=to_float(row["exchange_rate_npr_usd"]),
+            inflation_pct=to_float(row["inflation_pct"]),
         )
         db.add(record)
 
